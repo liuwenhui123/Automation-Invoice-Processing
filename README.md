@@ -106,16 +106,6 @@ python invoice_renamer.py
 pip install pypdf openpyxl
 ```
 
-### 打包为EXE
-```bash
-.\build_exe.ps1
-```
-
-或使用PyInstaller：
-```bash
-python -m PyInstaller --onefile --console --name "invoice_renamer" invoice_renamer.py
-```
-
 ### 项目结构
 ```
 invoice/
@@ -144,30 +134,6 @@ invoice/
 1. **执行归档后原文件会被移动**，请先备份重要文件
 2. **多类别处理**：第一个类别移动原文件，其他类别复制副本
 3. **建议先测试**：在测试目录试用后再处理正式文件
-
-## 📝 更新日志
-
-### v2.0 (2026-04-22)
-- ✅ 文件移动而非复制，节省磁盘空间
-- ✅ 全新树形UI，每个发票下直接显示类别复选框
-- ✅ 工具栏批量归类单选按钮
-- ✅ 更大的字体和行高
-- ✅ Excel导出格式优化（11列标准格式）
-- ✅ 执行完成后自动关闭窗口
-
-### v1.0
-- 基础发票解析和归档功能
-- 命令行模式
-- 简单的图形界面
-
-## 📞 技术支持
-
-如有问题或建议，请提交Issue。
-
-## 📄 许可证
-
-MIT License
-
 ---
 
 **版本**: 2.0  
