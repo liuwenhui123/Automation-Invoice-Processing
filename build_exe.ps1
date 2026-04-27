@@ -18,6 +18,7 @@ python -OO -m PyInstaller `
   --console `
   --name "invoice_renamer" `
   --icon $iconPath `
+  --add-data "$iconPath;assets" `
   --exclude-module test `
   --exclude-module unittest `
   --exclude-module pdb `

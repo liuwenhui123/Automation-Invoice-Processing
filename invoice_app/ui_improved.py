@@ -7,6 +7,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, simpledialog, ttk
 
+from .app_icon import apply_window_icon, configure_windows_app_id
 from .classification import DEFAULT_CATEGORIES
 from .models import InvoiceRecord
 from .parser import iter_pdf_files, parse_invoice, resolve_attachment_metadata
@@ -135,6 +136,7 @@ class ImprovedInvoiceApp:
         self.root = root
         self.workspace_root = get_workspace_root()
         self.root.title("发票归类工具")
+        apply_window_icon(self.root)
         self.root.geometry("1400x850")
         self.root.minsize(1200, 700)
 
@@ -374,6 +376,7 @@ class ImprovedInvoiceApp:
     def manage_categories(self) -> None:
         dialog = tk.Toplevel(self.root)
         dialog.title("管理类别")
+        apply_window_icon(dialog)
         dialog.geometry("400x500")
         dialog.transient(self.root)
         dialog.grab_set()
@@ -578,6 +581,7 @@ class ImprovedInvoiceApp:
 
 
 def run_improved_ui() -> None:
+    configure_windows_app_id()
     if hasattr(ctypes, "windll"):
         try:
             handle = ctypes.windll.kernel32.GetConsoleWindow()
@@ -587,5 +591,6 @@ def run_improved_ui() -> None:
             pass
 
     root = tk.Tk()
+    apply_window_icon(root)
     app = ImprovedInvoiceApp(root)
     root.mainloop()

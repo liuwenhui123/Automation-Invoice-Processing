@@ -7,6 +7,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, simpledialog, ttk
 
+from .app_icon import apply_window_icon, configure_windows_app_id
 from .classification import DEFAULT_CATEGORIES
 from .models import InvoiceRecord
 from .parser import iter_pdf_files, parse_invoice, resolve_attachment_metadata
@@ -33,6 +34,7 @@ class InvoiceDesktopApp:
         self.root = root
         self.workspace_root = get_workspace_root()
         self.root.title("发票归类工具")
+        apply_window_icon(self.root)
         self.root.geometry("1480x900")
         self.root.minsize(1180, 760)
         self.root.configure(bg="#edf2f7")
@@ -675,6 +677,7 @@ class InvoiceDesktopApp:
 
 
 def run_ui() -> None:
+    configure_windows_app_id()
     if hasattr(ctypes, "windll"):
         try:
             handle = ctypes.windll.kernel32.GetConsoleWindow()
@@ -683,5 +686,6 @@ def run_ui() -> None:
         except Exception:  # noqa: BLE001
             pass
     root = tk.Tk()
+    apply_window_icon(root)
     app = InvoiceDesktopApp(root)
     root.mainloop()
