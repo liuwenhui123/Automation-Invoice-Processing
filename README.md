@@ -97,6 +97,10 @@ python invoice_renamer.py
 
 ## 🔧 开发说明
 
+### 应用图标
+- `assets/invoice_processing.ico` 用作 PyInstaller 打包后的 EXE 图标。
+- 图标采用发票文档、自动化循环箭头和金额条元素，避免使用默认程序图标。
+
 ### 环境要求
 - Python 3.8+
 - Windows 10/11
@@ -121,6 +125,9 @@ invoice/
 │   ├── ui.py                  # 原UI（保留）
 │   └── ui_improved.py         # 改进UI
 ├── tests/                     # 测试文件
+├── assets/                    # 应用图标资源
+│   ├── invoice_processing.ico  # Windows EXE 打包图标
+│   └── invoice_processing.svg  # 可编辑源图标
 ├── dist/                      # 打包输出
 │   └── invoice_renamer.exe    # 可执行文件
 ├── invoice_renamer.py         # 主程序

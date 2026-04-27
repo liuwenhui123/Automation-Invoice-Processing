@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Invoice Processing Icon</title>
+  <desc id="desc">A document invoice with automation arrows and a green amount marker.</desc>
+  <circle cx="128" cy="128" r="120" fill="#2263eb"/>
+  <path d="M64 36h88l40 40v136H64z" fill="#fff"/>
+  <path d="M152 36v40h40z" fill="#dbeafe"/>
+  <rect x="82" y="94" width="86" height="8" rx="4" fill="#2563eb"/>
+  <rect x="82" y="120" width="86" height="8" rx="4" fill="#2563eb"/>
+  <rect x="82" y="146" width="86" height="8" rx="4" fill="#2563eb"/>
+  <rect x="82" y="172" width="58" height="18" rx="5" fill="#10b981"/>
+  <path d="M54 172a85 85 0 0 1 151-96" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 66l24 4-17 21z" fill="#fff"/>
+  <path d="M202 84a85 85 0 0 1-151 96" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M56 190l-24-4 17-21z" fill="#fff"/>
+</svg>

@@ -2,6 +2,11 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $scriptPath = Join-Path $projectRoot "invoice_renamer.py"
+$iconPath = Join-Path $projectRoot "assets\invoice_processing.ico"
+
+if (-not (Test-Path -LiteralPath $iconPath)) {
+    throw "Missing application icon: $iconPath"
+}
 
 python -m pip install --upgrade pip
 python -m pip install --upgrade pyinstaller pypdf openpyxl
@@ -12,6 +17,7 @@ python -OO -m PyInstaller `
   --onefile `
   --console `
   --name "invoice_renamer" `
+  --icon $iconPath `
   --exclude-module test `
   --exclude-module unittest `
   --exclude-module pdb `
@@ -34,4 +40,4 @@ python -OO -m PyInstaller `
   $scriptPath
 
 Write-Host ""
-Write-Host "Build complete: $(Join-Path $projectRoot 'dist\\invoice_renamer.exe')"
+Write-Host "Build complete: $(Join-Path $projectRoot 'dist\invoice_renamer.exe')"
