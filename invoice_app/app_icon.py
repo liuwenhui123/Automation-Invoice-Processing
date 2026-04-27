@@ -28,7 +28,15 @@ def configure_windows_app_id() -> None:
 
 
 def apply_window_icon(window: tk.Misc) -> None:
+    png_path = resource_path("assets/invoice_processing.png")
     icon_path = resource_path("assets/invoice_processing.ico")
+    if png_path.exists():
+        try:
+            photo = tk.PhotoImage(file=str(png_path))
+            window.iconphoto(True, photo)
+            window._invoice_icon_photo = photo
+        except tk.TclError:
+            pass
     if not icon_path.exists():
         return
     try:

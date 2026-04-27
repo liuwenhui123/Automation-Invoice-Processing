@@ -2,6 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $scriptPath = Join-Path $projectRoot "invoice_renamer.py"
+$assetsDir = Join-Path $projectRoot "assets"
 $iconPath = Join-Path $projectRoot "assets\invoice_processing.ico"
 
 if (-not (Test-Path -LiteralPath $iconPath)) {
@@ -18,7 +19,7 @@ python -OO -m PyInstaller `
   --console `
   --name "invoice_renamer" `
   --icon $iconPath `
-  --add-data "$iconPath;assets" `
+  --add-data "$assetsDir;assets" `
   --exclude-module test `
   --exclude-module unittest `
   --exclude-module pdb `
