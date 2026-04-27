@@ -158,26 +158,6 @@ Automation-Invoice-Processinc/
 └── start.bat                    # 源码快速启动脚本
 ```
 
-## 图标与打包
-
-图标相关代码位于 `invoice_app/app_icon.py`：
-
-- `resource_path()` 同时支持源码运行和 PyInstaller 打包后的资源路径。
-- `configure_windows_app_id()` 在 Windows 上设置 AppUserModelID，帮助任务栏使用应用自身图标。
-- `apply_window_icon()` 优先加载 `assets/invoice_processing.png` 作为 Tk 窗口图标，同时加载 `assets/invoice_processing.ico` 作为 Windows 窗口图标。
-
-重新封装 EXE：
-
-```powershell
-.\build_exe.ps1
-```
-
-打包脚本会：
-
-- 安装或升级 `pyinstaller`、`pypdf`、`openpyxl`
-- 使用 `assets/invoice_processing.ico` 写入 EXE 图标资源
-- 使用 `--add-data` 将整个 `assets` 目录放入打包产物
-- 输出 `dist\invoice_renamer.exe`
 
 ## 开发提示
 
