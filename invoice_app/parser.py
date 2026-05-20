@@ -19,7 +19,7 @@ ATTACHMENT_TITLES = (
     "销货清单",
     "销售清单",
 )
-DATE_PATTERN = re.compile(r"\d{4}年\d{2}月\d{2}日")
+DATE_PATTERN = re.compile(r"(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日")
 TAX_CODE_PATTERN = re.compile(r"[0-9A-Z]{15,20}")
 
 
@@ -129,10 +129,15 @@ def cleanup_name(name: str) -> str:
     return name
 
 
+def normalize_invoice_date(match: re.Match[str]) -> str:
+    year, month, day = match.groups()
+    return f"{year}年{int(month):02d}月{int(day):02d}日"
+
+
 def parse_invoice_date(text: str) -> str | None:
     match = DATE_PATTERN.search(normalize_text(text))
     if match:
-        return match.group(0)
+        return normalize_invoice_date(match)
     return None
 
 
@@ -207,6 +212,17 @@ def parse_party_details(
     if len(code_indexes) >= 2:
         seller_tax_code = info_lines[code_indexes[1]]
         seller_name = find_name_before(code_indexes[1])
+
+    if len(code_indexes) == 1:
+        previous_line = lines[code_indexes[0] - 1] if code_indexes[0] > 0 else ""
+        individual_match = re.match(r"^个人\s+(.+)$", normalize_text(previous_line).strip())
+        if individual_match:
+            candidate_seller = cleanup_name(individual_match.group(1))
+            if candidate_seller:
+                buyer_name = "个人"
+                buyer_tax_code = None
+                seller_name = candidate_seller
+                seller_tax_code = info_lines[code_indexes[0]]
 
     if buyer_name and seller_name:
         return buyer_name, buyer_tax_code, seller_name, seller_tax_code
