@@ -517,7 +517,6 @@ class ImprovedInvoiceApp:
             excel_output=None
         )
         preview = preview_records(self.records, options)
-        self.records = preview.records
         self._refresh_summary(preview.category_summaries)
 
     def execute_current(self) -> None:
