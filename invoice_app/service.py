@@ -196,8 +196,6 @@ def preview_records(records: list[InvoiceRecord], options: ProcessOptions) -> Pr
             source_name = record.source.name if record.source is not None else "未知来源"
             review_notes.append(f"{source_name}: 非发票类 PDF")
             continue
-        if not record.categories:
-            problems.append("未分类")
         if record.total_amount is None:
             problems.append("未识别到价税合计金额")
 

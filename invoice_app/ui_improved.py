@@ -291,23 +291,28 @@ class ImprovedInvoiceApp:
 
     def _build_summary_panel(self, parent: ttk.PanedWindow) -> ttk.Frame:
         panel = ttk.Frame(parent)
+        panel.columnconfigure(0, weight=1)
+        panel.rowconfigure(1, weight=1)
 
         header = ttk.Frame(panel)
-        header.pack(fill="x", pady=(0, 10))
+        header.grid(row=0, column=0, sticky="ew", pady=(0, 10))
         ttk.Label(header, text="分类汇总", font=("Microsoft YaHei UI", 12, "bold")).pack(side="left")
 
         tree_frame = ttk.Frame(panel)
-        tree_frame.pack(fill="both", expand=True, pady=(0, 15))
+        tree_frame.grid(row=1, column=0, sticky="nsew", pady=(0, 12))
+        tree_frame.columnconfigure(0, weight=1)
+        tree_frame.rowconfigure(0, weight=1)
 
         style = ttk.Style()
         style.configure("Treeview", rowheight=30, font=("Microsoft YaHei UI", 10))
         style.configure("Treeview.Heading", font=("Microsoft YaHei UI", 10, "bold"))
+        style.configure("Excel.TEntry", fieldbackground="#FFFFFF", selectbackground="#2563EB", selectforeground="#FFFFFF")
 
         self.summary_tree = ttk.Treeview(
             tree_frame,
             columns=("category", "count", "amount"),
             show="headings",
-            height=15
+            height=10
         )
 
         self.summary_tree.heading("category", text="类别")
@@ -318,13 +323,19 @@ class ImprovedInvoiceApp:
         self.summary_tree.column("count", width=70, anchor="center")
         self.summary_tree.column("amount", width=120, anchor="e")
 
-        self.summary_tree.pack(fill="both", expand=True)
+        self.summary_tree.grid(row=0, column=0, sticky="nsew")
 
-        excel_frame = ttk.LabelFrame(panel, text="Excel 输出", padding=15)
-        excel_frame.pack(fill="x", pady=(15, 0))
+        excel_frame = ttk.LabelFrame(panel, text="Excel 输出", padding=(12, 10))
+        excel_frame.grid(row=2, column=0, sticky="ew", pady=(6, 0))
+        excel_frame.columnconfigure(0, weight=1)
 
-        ttk.Entry(excel_frame, textvariable=self.excel_output_var, font=("Microsoft YaHei UI", 10)).pack(fill="x", pady=(0, 8))
-        ttk.Button(excel_frame, text="选择路径", command=self.choose_excel_output).pack(fill="x")
+        ttk.Entry(
+            excel_frame,
+            textvariable=self.excel_output_var,
+            font=("Microsoft YaHei UI", 10),
+            style="Excel.TEntry",
+        ).grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        ttk.Button(excel_frame, text="选择路径", command=self.choose_excel_output).grid(row=1, column=0, sticky="ew")
 
         return panel
 
@@ -336,7 +347,7 @@ class ImprovedInvoiceApp:
             relief="sunken",
             anchor="w",
             font=("Microsoft YaHei UI", 10),
-            padding=8
+            padding=(10, 11)
         )
         statusbar.pack(fill="x", pady=(15, 0))
 
