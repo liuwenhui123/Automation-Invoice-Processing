@@ -329,7 +329,10 @@ def looks_like_item_fragment(line: str) -> bool:
     compact = compact_line(line)
     if not compact:
         return False
-    if any(token in compact for token in ("合计", "价税合计", "备注", "备", "开票人")):
+    if any(
+        token in compact
+        for token in ("合计", "价税合计", "备注", "备", "开票人", "开户银行", "银行账号")
+    ):
         return False
     if TAX_CODE_PATTERN.fullmatch(compact) or DATE_PATTERN.fullmatch(compact):
         return False
@@ -342,8 +345,22 @@ def looks_like_item_fragment(line: str) -> bool:
     return bool(re.search(r"[\u4e00-\u9fff\*]", compact))
 
 
+def expand_detail_tokens(line: str) -> list[str]:
+    expanded: list[str] = []
+    for token in line.split():
+        match = re.fullmatch(
+            r"(\d+%|免税|不征税|出口零税率|普通零税率)(\d+(?:\.\d+)?)",
+            token,
+        )
+        if match:
+            expanded.extend([match.group(1), match.group(2)])
+            continue
+        expanded.append(token)
+    return expanded
+
+
 def extract_name_from_detail_line(line: str) -> str | None:
-    tokens = line.split()
+    tokens = expand_detail_tokens(line)
     if not tokens:
         return None
     rate_index = next(
@@ -353,21 +370,24 @@ def extract_name_from_detail_line(line: str) -> str | None:
     if rate_index is None:
         return None
 
-    strip_count = 3
-    if (
-        rate_index >= 4
-        and not is_numeric_token(tokens[rate_index - 4])
-        and len(tokens[rate_index - 4]) <= 3
-    ):
-        strip_count = 4
-    name_tokens = tokens[: max(0, rate_index - strip_count)]
+    if rate_index <= 1:
+        name_tokens = tokens[:rate_index]
+    else:
+        strip_count = 3
+        if (
+            rate_index >= 4
+            and not is_numeric_token(tokens[rate_index - 4])
+            and len(tokens[rate_index - 4]) <= 3
+        ):
+            strip_count = 4
+        name_tokens = tokens[: max(0, rate_index - strip_count)]
     name = "".join(name_tokens)
     name = re.sub(r"^[*]+|[*]+$", "*", name)
     return name or None
 
 
 def is_detail_row(line: str) -> bool:
-    tokens = line.split()
+    tokens = expand_detail_tokens(line)
     if not tokens:
         return False
     if not any(is_tax_rate_token(token) for token in tokens):
