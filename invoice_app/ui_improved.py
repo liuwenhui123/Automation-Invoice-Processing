@@ -157,12 +157,36 @@ class ImprovedInvoiceApp:
     def _build_ui(self) -> None:
         style = ttk.Style()
         style.theme_use("clam")
+        self.root.configure(background="#F6F8FB")
 
-        # 配置样式 - 增大按钮和复选框
-        style.configure("TButton", padding=(15, 10), font=("Microsoft YaHei UI", 10))
-        style.configure("TCheckbutton", padding=5, font=("Microsoft YaHei UI", 10))
-        style.configure("TLabel", font=("Microsoft YaHei UI", 10))
-        style.configure("TRadiobutton", padding=5, font=("Microsoft YaHei UI", 10))
+        bg = "#F6F8FB"
+        surface = "#FFFFFF"
+        text = "#1F2937"
+        muted = "#6B7280"
+        primary = "#2563EB"
+        border = "#E5E7EB"
+
+        style.configure(".", background=bg, foreground=text, font=("Microsoft YaHei UI", 10))
+        style.configure("TFrame", background=bg)
+        style.configure("TLabel", background=bg, foreground=text)
+        style.configure("TButton", padding=(12, 7), background=surface, foreground=text, bordercolor=border)
+        style.map(
+            "TButton",
+            background=[("active", "#EFF6FF"), ("pressed", "#DBEAFE")],
+            foreground=[("active", primary), ("pressed", primary)],
+        )
+        style.configure("TCheckbutton", background=bg, foreground=text, padding=5)
+        style.configure("TRadiobutton", background=bg, foreground=text, padding=5)
+        style.map(
+            "TCheckbutton",
+            foreground=[("disabled", muted)],
+            background=[("active", bg)],
+        )
+        style.map(
+            "TRadiobutton",
+            foreground=[("disabled", muted)],
+            background=[("active", bg)],
+        )
 
         main_container = ttk.Frame(self.root, padding=15)
         main_container.pack(fill="both", expand=True)
@@ -204,16 +228,24 @@ class ImprovedInvoiceApp:
 
         self.batch_category_var = tk.StringVar(value="")
 
+        self.batch_category_options = ttk.Frame(bottom_row)
+        self.batch_category_options.pack(side="left", fill="x")
+        self._build_batch_category_options()
+
+        ttk.Button(bottom_row, text="清除批量归类", command=self.clear_batch_category, width=14).pack(side="left", padx=10)
+
+    def _build_batch_category_options(self) -> None:
+        for widget in self.batch_category_options.winfo_children():
+            widget.destroy()
+
         for category in self.categories:
             ttk.Radiobutton(
-                bottom_row,
+                self.batch_category_options,
                 text=category,
                 variable=self.batch_category_var,
                 value=category,
                 command=self.apply_batch_category
             ).pack(side="left", padx=8)
-
-        ttk.Button(bottom_row, text="清除批量归类", command=self.clear_batch_category, width=14).pack(side="left", padx=10)
 
     def _build_content(self, parent: ttk.Frame) -> None:
         content = ttk.PanedWindow(parent, orient="horizontal")
@@ -329,10 +361,9 @@ class ImprovedInvoiceApp:
 
     def _refresh_toolbar_categories(self) -> None:
         """刷新工具栏的批量归类单选按钮"""
-        # 重新构建整个UI以更新类别列表
-        # 这是一个简化的方法，实际上应该只更新工具栏部分
-        # 但为了简单起见，我们保存当前状态后重建
-        pass  # 暂时不实现，因为需要重构工具栏
+        if self.batch_category_var.get() not in self.categories:
+            self.batch_category_var.set("")
+        self._build_batch_category_options()
 
     def _refresh_summary(self, summaries) -> None:
         for item in self.summary_tree.get_children():
